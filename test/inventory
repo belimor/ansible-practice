@@ -1,6 +1,6 @@
 # inventory
 
-[webserver:children]
+[webservers:children]
 test
 
 [test]
