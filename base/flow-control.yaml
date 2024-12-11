@@ -4,6 +4,9 @@
 
   vars:
     url: "https://www.example.com"
+    packages:
+      - mc
+      - vim
 
   tasks:
   - name: "Install repo - CentOs/RHEL 7"
@@ -57,7 +60,22 @@
   - debug: msg="Regexp match"
     when: url is regex("com")
 
+  - name: apt not in
+    when: item not in packages and True | default("alwaysworks")
+    apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - mc
+      - vim
+      - telnet
 
+  - debug:
+      msg: "Always works"
+    when: item in undefined_variable | default(omit)
+    loop:
+      - qwe
+      - qwer
 
 
 
