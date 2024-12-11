@@ -4,4 +4,4 @@
 test
 
 [test]
-vbox1 ansible_host="192.168.1.69" ansible_user="dmtrv" ansible_python_interpreter="/usr/bin/python3.12"
+vbox1 ansible_host="192.168.1.69" ansible_user="dmtrv" ansible_python_interpreter="/usr/bin/python3.12" my_var="!Hi!"

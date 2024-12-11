@@ -1,10 +1,38 @@
 ---
+#
+# Variables
+#
+
 - name: Playbooks about variables
   hosts: all
+  gather_facts: yes
+  vars_files:
+    - files/variables.yaml
   vars:
     host1:
       ssh_port: 22
       web_port: 80
+
+  tasks:
+    - name: Task variable
+      debug:
+        msg: "Variable: {{ my_task_var }}"
+      vars:
+        my_task_var: "MY-TASK-VAR"
+
+    - name: Magic variables + inventory variable
+      debug:
+        msg: "Text: {{ hostvars[inventory_hostname].my_var }}"
+
+    - shell: grep -c "authentication failure" /var/log/syslog
+      register: messages_contents
+
+    - shell: echo "Lockdown" 
+      when: messages_contents == 5
+
+    - shell: "echo {{ ansible_facts['enp0s3']['ipv4']['address'] }}"
+
+    - shell: "echo {{ ansible_facts['os_family'] }}"
 
 # recommended:
 # host1['ssh_port']
@@ -14,14 +42,3 @@
 # host1.ssh_port
 # host2.ssh_port
 
-
-  tasks:
-    - shell: grep -c "authentication failure" /var/log/syslog
-      register: messages_contents
-
-    - shell: echo "Lockdown" ##/usr/bin/lockdown.sh
-      when: messages_contents == 5
-
-    - shell: "echo {{ ansible_facts['enp0s3']['ipv4']['address'] }}"
-
-    - shell: "echo {{ ansible_facts['os_family'] }}"
