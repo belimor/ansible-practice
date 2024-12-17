@@ -43,3 +43,7 @@ ansible-playbook -i vbox.yaml playbooks/test.yaml
 ansible-playbook -i aws_ec2.yaml playbooks/test.yaml
 
 ansible -i ec2.py all -m ping
+
+ansible-inventory -i inventory/prod/aws_ec2.yaml --graph
+ansible-inventory -i inventory/prod/ --list
+
