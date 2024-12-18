@@ -1,0 +1,9 @@
+---
+- name: Tasks Plsybook
+  hosts: all
+  tasks:
+    - name: Run in 1 min
+      ansible.posix.at:
+        command: ls -la
+        count: 1
+        units: minutes
