@@ -1,0 +1,76 @@
+---
+# with_<lookup>
+# with_items
+# loop = with_items
+#
+# loop:
+#   - item1
+#   - item2
+#   - item3
+#
+# loop: "{{ query('inventory_hostnames', 'webservers') }}"
+#
+# with_items:
+#   - 1
+#   - [2, 3]
+#   - 3
+#
+# loop "{{ [1, [2, 3], 4] | flatten(1) }}"
+
+- name: Playbook loops
+  hosts: all
+  become: yes
+  vars:
+    packages:
+      - tmux
+      - eza
+      - bat
+      - fish
+
+    users:
+      sally:
+        name: Sally Smith
+        phone: 403-443-4367
+      bob:
+        name: Bob Thomas
+        phone: 403-443-3344
+
+  tasks:
+    - name: Install soft
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - htop
+        - tree
+
+    - name: Install cli tools
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - mc
+        - tldr
+
+    - name: Install more tools
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages }}"
+
+
+    - name: create users
+      user:
+        name: "{{ item.name }}"
+        state: present
+        group: "{{ item.groups }}"
+      loop:
+        - { name: "webadmin1", groups: "wheel" }
+        - { name: "webadmin2", groups: "nginx" }
+          
+    - name: Print name and number
+      debug:
+        msg: "User {{ item.key }} is {{ item.value.name }} ({{ item.value.phone }})"
+      loop: "{{ users|dict2items }}"
+      #loop: "{{ loopup('dict', users)}}"
+
