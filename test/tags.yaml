@@ -1,0 +1,24 @@
+---
+# Tags can apply to
+# - plays
+# - tasks
+# - blocks
+# - roles
+# - imported roles
+
+- name: Tags playbook
+  hosts: all
+  tags:
+  - super
+  roles:
+  - role: common
+    vars:
+      http_port: 80
+    tags:
+    - webserver
+
+  tasks:
+  - name:
+    command: echo "Hello"
+    tags:
+      - echo
