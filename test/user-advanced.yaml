@@ -1,0 +1,50 @@
+---
+- name: Create users with dictionary
+  hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    myusers:
+    - name: user1
+      user: user1
+      comment: "User One"
+      state: present
+      shell: /usr/bin/bash
+      groups: wheel
+    - name: user2
+      user: user2
+      comment: "User Two"
+      state: present
+      shell: /usr/bin/bash
+      groups: wheel  
+  tasks:
+    - name: Create group wheel
+      group:
+        name: wheel
+        state: present
+
+    - name: Create users
+      user:
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"
+        comment: "{{ item.comment }}"
+        shell: "{{ item.shell }}"
+        groups: "{{ item.groups }}"
+        password: "{{ default_password | password_hash('sha512','A512') }}"
+        update_password: 'on_create'
+      loop: "{{ myusers }}"
+      register: userstat
+
+    - name: Force password reset for new user
+      command: chage -d 0 {{ item.item.user }}
+      when: userstat.changed
+      with_items: "{{ userstat.results }}"
+
+
+
+
+
+
+
+
+
