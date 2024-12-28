@@ -1,0 +1,9 @@
+---
+http_port: 80
+
+base_packages:
+  - htop
+  - tree
+  - mc
+
+default_password_vault: "Check password variable in the vault file"
