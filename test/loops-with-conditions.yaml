@@ -1,0 +1,24 @@
+---
+- name: Loops with conditions
+  hosts: all
+  vars:
+    mydict: {"one": 1, "two": 2, "three": 3 }
+
+  tasks:
+    - name: Loop through the list with conditions
+      debug:
+        msg: "Item is {{ item }}"
+      loop: [0, 1, 2, 5, 6]
+      when: item > 1
+
+    - name: Loop through dictionary with conditions
+      debug:
+        msg: "{{ item.key }}: {{ item.value }}"
+      loop: "{{ query('dict', mydict) }}"
+      when: item.value > 1
+
+    - shell: /usr/bin/program
+      register: result
+      until: result.stdout.find("success") != -1
+      retries: 2
+      delay: 10
