@@ -1,0 +1,68 @@
+---
+- name: Flow control playbook
+  hosts: all
+
+  vars:
+    url: "https://www.example.com"
+
+  tasks:
+  - name: "Install repo - CentOs/RHEL 7"
+    command:
+      cmd: rpm -ivh pkg-7.rpm 
+      creates: /etc/yum.repos.d/pkg.repo
+    when: "ansible_os_family == 'RedHat' and ansible_distribution_version == '7'"
+
+  - name: "Install repo - CentOs/RHEL 8"
+    command:
+      cmd: rpm -ivh pkg-8.rpm 
+      creates: /etc/yum.repos.d/pkg.repo
+    when: "ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_version'] == '8'"
+
+  - name: "Install repo - CentOs/RHEL 8"
+    command:
+      cmd: rpm -ivh pkg-8.rpm 
+      creates: /etc/yum.repos.d/pkg.repo
+    when: "ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_version'] == '8' or
+           ansible_facts['distribution'] == 'Redhat' and ansible_facts['distribution_version'] == '8'"
+
+    # Replace AND
+  - name: "Install repo - CentOs/RHEL 8"
+    command: rpm -ivh pkg-8.rpm 
+    args:
+      creates: /etc/yum.repos.d/pkg.repo
+    when: 
+      - ansible_facts['os_family'] == 'RedHat'
+      - ansible_facts['distribution_version'] == '8'
+
+    # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tests.html
+    # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html
+
+  - name: Rheck admin
+    command: /bin/admin
+    register: result
+    ignore_errors: True
+
+  - command: logger "command failed"
+    when: result is failed
+
+  - command: logger "command succeeded"
+    when: result is succeeded
+
+  - debug: msg="Url match"
+    when: url is match("https://www.example.com")
+
+  - debug: msg="Search match"
+    when: url is search("example")
+
+  - debug: msg="Regexp match"
+    when: url is regex("com")
+
+
+
+
+
+
+
+
+
+
