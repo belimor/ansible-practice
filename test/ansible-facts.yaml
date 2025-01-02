@@ -1,0 +1,12 @@
+---
+
+- name: Ansible facts
+  hosts: all
+  tasks:
+    - name: Ansible facts
+      debug:
+        msg: "{{ ansible_facts['enp0s3']['ipv4']['address'] }}"
+
+    - name: Magic variable
+      debug:
+        msg: "{{ hostvars['vbox1']['ansible_facts']['distribution'] }}"
