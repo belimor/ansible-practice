@@ -21,3 +21,7 @@
 
     - shell: echo "Lockdown" ##/usr/bin/lockdown.sh
       when: messages_contents == 5
+
+    - shell: "echo {{ ansible_facts['enp0s3']['ipv4']['address'] }}"
+
+    - shell: "echo {{ ansible_facts['os_family'] }}"
