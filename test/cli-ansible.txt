@@ -5,6 +5,7 @@ ansible-inventory -i inventory -y --list
 
 ansible all -i inventory -m ping
 ansible -i inventory webservers -m setup
+ansible -i inventory webservers -m setup -a "filter=enp0s3"
 
 ansible-playbook -i inventory playbooks/test.yaml
 ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass
