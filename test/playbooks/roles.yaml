@@ -1,0 +1,25 @@
+---
+
+- name: Configure Web Servers
+  hosts: all
+  remote_user: root
+
+  vars:
+    http_port: 80
+
+  roles:
+    - "../roles/common"
+
+  # dynamic (works in loops, doesn't with handlers):
+  # include_role
+  # include_tasks
+  #
+  # static:
+  # import_playbook
+  # import_role
+  # import_tasks
+
+# tasks:
+# - name: Test
+#   import_role:
+#     name: nginx
