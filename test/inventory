@@ -1,0 +1,7 @@
+# inventory
+
+[webserver:children]
+test
+
+[test]
+dmtrv ansible_host="192.168.227.227" ansible_user="dmtrv" ansible_python_interpreter="/usr/bin/python3.12"

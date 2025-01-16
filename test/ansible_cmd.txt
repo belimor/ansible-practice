@@ -1,0 +1,3 @@
+ansible-inventory -i inventory --list
+ansible-inventory -i inventory -y --list
+ansible all -i inventory -m ping
