@@ -1,0 +1,8 @@
+ansible-inventory -i inventory --list
+ansible-inventory -i inventory -y --list
+ansible all -i inventory -m ping
+
+ansible-playbook -i inventory playbooks/test.yaml
+ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass
+ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass --become --necome-method=BECOME_METHOD
+

@@ -3,8 +3,16 @@
 
 - name: "Test playbook"
   hosts: all
+  remote_user: dmtrv
+  #become: yes
+  #become_user: root     # ! Security: Don't become an unprivileged user
+  #become_method: 
+  #become_flags:
+  vars:
+    http_port: 80
   tasks:
     - name: "Test task1"
+      remote_user: dmtrv
       ansible.builtin.debug:
         msg: "Test message"
 
