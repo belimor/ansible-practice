@@ -8,7 +8,6 @@
       ansible.builtin.apt:
         name: nginx
         state: latest
-      check_mode: yes
 
     - name: "Command module"
       ansible.builtin.command: '/usr/bin/systemctl status nginx'
@@ -31,3 +30,4 @@
         name: memcached
         state: restarted
       listen: "restart all web services"
+      check_mode: yes
