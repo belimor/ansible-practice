@@ -1,0 +1,23 @@
+---
+- name: Playbooks about variables
+  hosts: all
+  vars:
+    host1:
+      ssh_port: 22
+      web_port: 80
+
+# recommended:
+# host1['ssh_port']
+# host1['web_port']
+#
+# not recommendet:
+# host1.ssh_port
+# host2.ssh_port
+
+
+  tasks:
+    - shell: grep -c "authentication failure" /var/log/syslog
+      register: messages_contents
+
+    - shell: echo "Lockdown" ##/usr/bin/lockdown.sh
+      when: messages_contents == 5
