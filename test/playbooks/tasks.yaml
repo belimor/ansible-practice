@@ -2,18 +2,32 @@
 
 - name: "Playbook to review tasks"
   hosts: all
-  become: yes
+  become: true
   tasks:
     - name: "Install nginx"
       ansible.builtin.apt:
         name: nginx
         state: latest
-      
+      check_mode: yes
+
     - name: "Command module"
-      ansible.builtin.command: /usr/bin/systemctl status nginx 
-      ignore_errors: True
-      notify: restart nginx
+      ansible.builtin.command: '/usr/bin/systemctl status nginx'
+      ignore_errors: true
+      notify: Restart nginx
+
+    - name: "Restart all"
+      ansible.builtin.command: 'echo "This is the task to restart all services"'
+      notify: "restart all web services"
 
   handlers:
-    - name: restart nginx
+    - name: "Restart nginx"
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+      listen: "restart all web services"
 
+    - name: "Restart memcached"
+      ansible.builtin.service:
+        name: memcached
+        state: restarted
+      listen: "restart all web services"

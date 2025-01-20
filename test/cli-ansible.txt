@@ -6,3 +6,11 @@ ansible-playbook -i inventory playbooks/test.yaml
 ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass
 ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass --become --necome-method=BECOME_METHOD
 
+
+apt-get install yamllint
+yamllint tasks.yam
+pip3 install --user ansible-lint
+~/.local/bin/ansible-lint tasks.yaml
+
+ansible-playbook -i inventory playbooks/test.yaml --check
+ansible-playbook -i inventory playbooks/test.yaml --list-hosts
