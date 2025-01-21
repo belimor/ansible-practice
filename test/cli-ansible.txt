@@ -1,6 +1,8 @@
 ansible-inventory -i inventory --list
 ansible-inventory -i inventory -y --list
+
 ansible all -i inventory -m ping
+ansible -i inventory webservers -m setup
 
 ansible-playbook -i inventory playbooks/test.yaml
 ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass
@@ -14,3 +16,9 @@ pip3 install --user ansible-lint
 
 ansible-playbook -i inventory playbooks/test.yaml --check
 ansible-playbook -i inventory playbooks/test.yaml --list-hosts
+
+ansible-galaxy init common
+ansible-galaxy collection list
+ansible-galaxy collection install community.general
+
+ansible-doc shell
