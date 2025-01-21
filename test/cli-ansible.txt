@@ -1,4 +1,4 @@
-# Ansible commands
+## Ansible commands
 
 ansible-inventory -i inventory --list
 ansible-inventory -i inventory -y --list
@@ -9,7 +9,6 @@ ansible -i inventory webservers -m setup
 ansible-playbook -i inventory playbooks/test.yaml
 ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass
 ansible-playbook -i inventory playbooks/test.yaml --ask-become-pass --become --necome-method=BECOME_METHOD
-
 
 apt-get install yamllint
 yamllint tasks.yam
