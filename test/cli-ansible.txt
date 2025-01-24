@@ -24,3 +24,4 @@ ansible-galaxy collection list
 ansible-galaxy collection install community.general
 
 ansible-doc shell
+ansible-doc -t lookup -l
