@@ -1,0 +1,42 @@
+---
+# tasks file for common
+
+- import_tasks: install_nginx.yml
+
+- name: Test task
+  command: echo "123"
+
+- name: Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Nginx service
+  service:
+    name: nginx
+    state: started
+
+- name: Start firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  ignore_errors: true
+
+- name: Add firewall rule
+  firewalld:
+    port: "{{ http_port }}/tcp"
+    permanent: True
+    state: enabled
+    immadiate: yes
+  ignore_errors: true
+
+# {{ http_port | default(80) }}
+# {{ num_list | min }}
+# {{ num_list | max }}
+# {{ 60 | random }}
+# {{ '52:54:00' | random_mac }}
+#
+
+
+
