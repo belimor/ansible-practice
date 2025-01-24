@@ -1,0 +1,19 @@
+---
+- name: Register output of the loop to a variable
+  hosts: all
+  gather_facts: False
+
+  tasks:
+    - name: Output loop to registered var
+      #shell: "echo {{ item }}"
+      shell: "cat {{ item }}"
+      loop:
+        - one
+        - two
+      register: echo
+
+    - name: Fail if rc is not 0
+      fail:
+        msg: "The command ({{ item.cmd }}) had non zero return code"
+      when: item.rc != 0
+      loop: "{{ echo.results }}"
