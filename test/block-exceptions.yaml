@@ -1,0 +1,27 @@
+---
+- name: Block exceptions
+  hosts: all
+  tasks:
+  - name: Attempt and Recovey
+    block:
+    - debug:
+        msg: This executes normally
+    - name: This is forced failure
+      command:
+        cmd: /bin/false
+    - debug:
+        msg: This never executes
+    rescue:
+    - debug:
+        msg: "This catches an error for: {{ ansible_failed_task.name }}"
+    - name: This is forced failure
+      command:
+        cmd: /bin/false
+    - debug:
+        msg: This never executes
+    always:
+    - debug:
+        msg: Always
+
+# ansible_failed_task
+# ansible_failed_result

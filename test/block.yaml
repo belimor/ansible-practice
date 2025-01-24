@@ -1,0 +1,21 @@
+---
+- name: Task blocks
+  hosts: all
+  tasks:
+    - name: Debug
+      debug:
+        msg: "{{ ansible_facts['distribution'] }}"
+    - name: Install and start Apache
+      block:
+      - name: install httpd
+        apt:
+          name: nginx
+          state: present
+      - name: start service and enable it
+        service:
+          name: nginx
+          state: started
+          enabled: True
+      when: ansible_facts['distribution'] == 'Ubuntu'
+      become: yes
+      ignore_errors: yes
