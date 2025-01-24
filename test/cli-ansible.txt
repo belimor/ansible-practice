@@ -25,3 +25,11 @@ ansible-galaxy collection install community.general
 
 ansible-doc shell
 ansible-doc -t lookup -l
+
+ansible-playbook -i inventory --tags "packages" playbooks/test.yaml
+ansible-playbook -i inventory --tags "packages,services" playbooks/test.yaml
+ansible-playbook -i inventory --tags "packages" playbooks/test.yaml --list-tags
+ansible-playbook -i inventory --tags "never" playbooks/test.yaml
+ansible-playbook -i inventory --skip-tags "packages" playbooks/test.yaml
+ansible-playbook -i inventory --skip-tags "always" playbooks/test.yaml
+
