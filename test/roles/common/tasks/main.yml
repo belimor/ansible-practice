@@ -2,6 +2,7 @@
 # tasks file for common
 
 - import_tasks: install_nginx.yml
+- import_tasks: templates.yml
 
 - name: Test task
   command: echo "123"

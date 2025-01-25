@@ -1,0 +1,9 @@
+---
+- name: Ansible Template Example
+  template:
+    src: welcome.j2
+    dest: /tmp/welocme.txt
+
+- name: Output the file
+  command:
+    cmd: cat /tmp/welocme.txt
