@@ -1,0 +1,85 @@
+---
+# tasks file for base
+- include_tasks: tasks.yml
+
+- name: Create demo-group
+  ansible.builtin.group:
+    name: demo-group
+    state: present
+
+- name: Create demo-user
+  ansible.builtin.user:
+    name: demo-user
+    group: demo-group
+    create_home: yes
+    shell: /bin/bash
+
+- name: Create groups
+  ansible.builtin.group:
+    name: {{ item }}
+    state: present
+  loop:
+    - eth
+      #- geth
+      #- prysm-beacon
+
+- name: Create geth user
+  ansible.builtin.user:
+    name: geth
+    group: geth
+    groups: eth
+    password: '*'
+    comment: 'Geth Client'
+    create_home: yes
+    shell: /bin/bash
+
+- name: Create prysm-beacon user
+  ansible.builtin.user:
+    name: prysm-beacon
+    group: prysm-beacon
+    groups: eth
+    password: '*'
+    comment: 'Prysm Beacon Client'
+    create_home: yes
+    shell: /bin/bash
+
+      #sudo adduser --home /home/geth --disabled-password --gecos 'Geth Client' geth
+      #sudo adduser --home /home/prysm-beacon --disabled-password --gecos 'Prysm Beacon Client' prysm-beacon
+      #sudo groupadd eth
+      #sudo usermod -a -G eth geth
+      #sudo usermod -a -G eth prysm-beacon
+
+# Allow OpenSSH. (Note that as ufw manages its own state, simply removing
+# a rule=allow task can leave those ports exposed. Either use delete=true
+# or a separate state=reset task)
+
+#- name: Enable ufw firewall
+#  community.general.ufw:
+#    state: enabled
+#    policy: allow
+#    logging: on
+
+#sudo ufw allow 30303/tcp
+#sudo ufw allow 30303/udp
+#sudo ufw allow 12000/udp
+#sudo ufw allow 13000/tcp
+#sudo ufw allow 22/tcp
+#sudo ufw enable
+
+- name: Allow all access from RFC1918 networks to this host
+  community.general.ufw:
+    rule: allow
+    port: '{{ item.port }}'
+    proto: '{{ item.proto }}'
+  loop:
+    - { port: '30303', proto: 'tcp' }
+    - { port: '30303', proto: 'udp' }
+    - { port: '12000', proto: 'udp' }
+    - { port: '13000', proto: 'tcp' }
+    - { port: '22', proto: 'tcp' }
+  notify: Reset ufw firewall
+
+- name: Check ufw status:
+  ansible.builtin.command: ufw status
+
+

@@ -1,0 +1,7 @@
+---
+# handlers file for base
+- name: Reset ufw firewall
+  community.general.ufw:
+    state: reset
+    policy: deny
+    logging: on

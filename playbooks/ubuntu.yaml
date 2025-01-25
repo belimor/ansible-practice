@@ -1,0 +1,10 @@
+---
+
+- name: Playbook to manage ubuntu host
+  hosts: all
+  remote_user: ubuntu
+  become: true
+
+  roles:
+    - "../roles/base"
+    - "../roles/ethereum-node"
