@@ -23,8 +23,14 @@ ansible-galaxy init common
 ansible-galaxy collection list
 ansible-galaxy collection install community.general
 
+ansible galaxy install community.role
+ansible-galaxy list
+ansible-galaxy install -r requirments.yml
+
 ansible-doc shell
 ansible-doc -t lookup -l
+ansible-doc -y inventory -l
+ansible-doc -y inventory <plugin_name>
 
 ansible-playbook -i inventory --tags "packages" playbooks/test.yaml
 ansible-playbook -i inventory --tags "packages,services" playbooks/test.yaml
@@ -33,3 +39,7 @@ ansible-playbook -i inventory --tags "never" playbooks/test.yaml
 ansible-playbook -i inventory --skip-tags "packages" playbooks/test.yaml
 ansible-playbook -i inventory --skip-tags "always" playbooks/test.yaml
 
+ansible-playbook -i vbox.yaml playbooks/test.yaml
+ansible-playbook -i aws_ec2.yaml playbooks/test.yaml
+
+ansible -i ec2.py all -m ping
