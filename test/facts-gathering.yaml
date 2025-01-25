@@ -1,0 +1,11 @@
+---
+- name: Anisble facts_gavering
+  hosts: all
+  gather_facts: no
+  pre_tasks:
+    - setup:
+      gather_subset:
+        - '!all'
+        - '!any'
+        - 'network'
+        - 'virtual'
