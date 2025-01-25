@@ -1,0 +1,15 @@
+---
+- name: Manage webservers
+  hosts: webservers
+  serial: 5
+  #serial: "30%"
+  #seriaL:
+  #  - 1
+  #  - 5
+  #  - 10
+  strategy: free
+  startegy: linear
+
+  tasks:
+    - command: echo 123
+      throttle: 1
