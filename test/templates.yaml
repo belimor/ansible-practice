@@ -1,0 +1,40 @@
+---
+- name: Ansible templates
+  hosts: all
+  gather_facts: false
+  vars:
+    UserName: user1
+    message:
+      - hello
+      - world
+      - "!"
+    message1:
+      bob:
+        greeting: "Hello Bob"
+        salutation: "Hail Bob!"
+
+  tasks:
+    - name: Simple Template Example
+      template:
+        src: "SimpleTemplate.j2"
+        dest: /tmp/{{ UserName }}_welcome.txt
+
+    - debug:
+        msg: "{{ message }}"
+
+    - debug:
+        msg: "{{ message[0] }}"
+
+    - debug:
+        msg: "{{ message1['bob']['salutation'] }}"
+
+    - name: Not recommended
+      debug:
+        msg: "{{ message1.bob.salutation }}"
+
+    - name: Run command
+      command: ip a
+      register: cmdout
+
+    - debug:
+        msg: "{{ cmdout.stdout.split('\n') }}"
