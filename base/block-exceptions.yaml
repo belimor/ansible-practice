@@ -25,3 +25,7 @@
 
 # ansible_failed_task
 # ansible_failed_result
+#
+# Can't loop aver entire blcok
+# But can loop inside each task
+#
