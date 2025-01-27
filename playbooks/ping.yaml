@@ -1,0 +1,9 @@
+---
+
+- name: Playbook to manage ubuntu host
+  hosts: ansible
+  remote_user: ubuntu
+  become: true
+
+  roles:
+
