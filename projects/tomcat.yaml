@@ -1,0 +1,124 @@
+---
+#
+# https://docs.vultr.com/how-to-install-apache-tomcat-on-ubuntu-24-04
+#
+- name: Playbook to install Tomcat server on Ubuntu 24.02
+  hosts: all
+  gather_facts: no
+  become: yes
+
+  vars:
+    tomcat_home: ""
+
+  roles:
+    #  - common_ubuntu
+
+  tasks:
+    - name: Install OpenJDK 17
+      ansible.builtin.apt:
+        name: openjdk-17-jdk
+        state: present
+
+    - name: Check Java version
+      ansible.builtin.command:
+        cmd: java --version
+      register: output
+
+    - debug:
+        msg: "{{ item }}"
+      with_items:
+        - "{{ output.stdout_lines }}"
+
+    - name: Download Tomcat
+      ansible.builtin.get_url:
+        url: https://dlcdn.apache.org/tomcat/tomcat-11/v11.0.2/bin/apache-tomcat-11.0.2.tar.gz
+        dest: /tmp/tomcat.tar.gz
+        mode: '0444'
+
+    - name: Add tomcat user
+      ansible.builtin.user:
+        name: tomcat
+        shell: /usr/bin/false
+
+    - name: Create /opt/tomcat folder
+      ansible.builtin.file:
+        path: /opt/tomcat
+        state: directory
+        owner: tomcat
+        group: tomcat
+
+    - name: Extract tomcat.tar.gz into /opt/tomcat/
+      ansible.builtin.unarchive:
+        remote_src: yes
+        src: /tmp/tomcat.tar.gz
+        dest: /opt/tomcat/
+        owner: tomcat
+        group: tomcat
+        extra_opts: "--strip-components=1"
+
+    - name: Change permissions for /opt/tomcat/conf
+      ansible.builtin.file:
+        path: /opt/tomcat/conf
+        state: directory
+        owner: tomcat
+        group: tomcat
+        mode: '0750'
+
+    - name: List of files
+      ansible.builtin.command:
+        cmd: ls /opt/tomcat/conf/
+      register: files_list
+
+    - name: Change group permissions for all files in /opt/tomcat/conf/
+      ansible.builtin.file:
+        path: "/opt/tomcat/conf/{{ item }}"
+        state: file
+        mode: '0640'
+      with_items: "{{ files_list.stdout_lines }}"
+      #with_fileglob: '/opt/tomcat/conf/*.*'
+      #loop: "{{ lookup('fileglob', '/opt/tomcat/conf/*', wantlist=True) }}"
+
+    - name: Update tomcat-users.xml
+      ansible.builtin.copy:
+        src: "tomcat-users.xml"
+        dest: "/opt/tomcat/conf/tomcat-users.xml"
+        mode: '0640'
+
+    - name: Update manager-context.xml
+      ansible.builtin.copy:
+        src: "manager-context.xml"
+        dest: "/opt/tomcat/webapps/manager/META-INF/context.xml"
+        mode: '0640'
+
+    - name: Update  host-manager-conetxt.xml
+      ansible.builtin.copy:
+        src: "host-manager-conetxt.xml"
+        dest: "/opt/tomcat/webapps/host-manager/META-INF/context.xml"
+        mode: '0640'
+
+    - name: Copy tomcat.service to the server
+      ansible.builtin.copy:
+        src: "tomcat.service"
+        dest: "/etc/systemd/system/tomcat.service"
+        mode: '0644'
+      tags:
+        - last
+
+    - name: Reload systemd daemon
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+        name: tomcat
+        enabled: true
+        state: started
+      tags:
+        - last
+
+
+
+
+
+
+
+
+
+
