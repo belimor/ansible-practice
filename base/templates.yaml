@@ -15,7 +15,7 @@
 
   tasks:
     - name: Simple Template Example
-      template:
+      ansible.builtin.template:
         src: "SimpleTemplate.j2"
         dest: /tmp/{{ UserName }}_welcome.txt
 
@@ -38,3 +38,6 @@
 
     - debug:
         msg: "{{ cmdout.stdout.split('\n') }}"
+
+    - debug:
+        msg: "{{ lookup('ansible.builtin.template','SimpleTemplate.j2') }}"
