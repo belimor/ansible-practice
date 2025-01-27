@@ -1,0 +1,27 @@
+---
+- name: Changed control
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Command task
+      command:
+        cmd: id dmtrv
+      register: user_id
+      changed_when: false
+
+    - name: Print info about user
+      debug:
+        msg: "{{ user_id.stdout_lines | default('User not found') }}"
+
+    - name: Command task 2
+      command:
+        cmd: id ubuntu3
+      register: user_id2
+      changed_when: false
+      failed_when: false
+
+    - name: Print info about user
+      debug:
+        msg: "{{ user_id2.stdout_lines | default('User not found') }}"
+
+# Need more work
