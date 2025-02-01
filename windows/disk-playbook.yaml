@@ -1,0 +1,10 @@
+---
+- name: Playbook to manage Win disks
+  hosts: all
+  tasks:
+    - win_disk_facts
+    - win_partition
+    - win_format
+
+
+

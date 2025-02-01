@@ -1,0 +1,31 @@
+---
+- name: Windows Playbook 2
+  hosts: all
+  tasks:
+    - name: Create User Group:
+      win_group:
+        name: Dev
+        state: present
+
+    - name: Create user:
+      win_user:
+        name: user2
+        state: present
+        password: "Password123"
+        groups:
+          - Users
+          - Dev
+
+    - name: Delete user:
+      win_user:
+        name: user2
+        state: absent
+
+    - name: Add users to grop:
+      win_group_membership:
+        name: Dev
+        state: present
+        members:
+          - User3
+          - User4
+       

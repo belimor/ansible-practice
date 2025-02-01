@@ -1,0 +1,42 @@
+---
+- name: Windows Playbook:
+  hosts: all
+  tasks:
+    - name: User creation:
+      win_user:
+        name: user1
+        state: present
+        password: "Password123"
+
+    - name: Create directory:
+      win_file:
+        path: "C:\\Temp\\Demo"
+        state: directory
+
+    - name: Create file with content:
+      win_copy:
+        dest: "C:\\Temp\\Demo\\MyTextFile.txt"
+        content: "Hello World!"
+
+    - name: Change file owner:
+      win_owner:
+        path: "C:\\Temp\\Demo"
+        user: user1
+
+    - name: Add permissions to that directory:
+      win_acl:
+        path: "C:\\Temp\\Demo"
+        user: user1
+        rights: Read,Write,FullControl,Delete
+        type: allow
+        state: present
+
+    - name: Set inheritance:
+      win_acl_inheritance:
+        path: "C:\\Temp\\Demo"
+        state: present
+
+    - name: Run Windows command:       
+      win_command:
+        cmd: Get-Disk
+
