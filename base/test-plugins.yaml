@@ -1,0 +1,28 @@
+---
+- name: Playbook to try test plugins
+  hosts: all
+  gather_facts: yes
+  vars:
+    ansible_ssh_user: ubuntu
+  tasks:
+    - name: Test – is the path absolute
+      ansible.builtin.debug:
+        msg: "{{ '/etc/hosts' is abs }}"
+
+    - name: Test – are all conditions in a list True
+      ansible.builtin.debug:
+        msg: "{{ [true, booleanvar, 3 == 3] is all }}"
+      vars:
+        booleanvar: True
+
+    - name: Test – is any condition in a list True
+      ansible.builtin.debug:
+        msg: "{{ [true, booleanvar, 3 == 2] is any }}"
+
+    - name: Run command for the next check
+      command: echo "Hello World"
+      register: taskresults
+
+    - name: test – did the task require changes
+      ansible.builtin.debug:
+        msg: "{{ taskresults is changed }}"
