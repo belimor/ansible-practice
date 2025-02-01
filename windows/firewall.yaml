@@ -1,0 +1,9 @@
+---
+- name: Firewall
+  hosts: all
+  tasks:
+    - win_firewall_rule:
+
+    - win_security_policy:
+
+    - win_user_rights:

@@ -1,0 +1,23 @@
+---
+- name: Install software
+  hosts: all
+  tasks:
+    - name: Install Git
+      win_chocolatey:
+        name: get
+        state: present
+        #state: latest
+        #state: absent
+    
+    - name: Install IIS (Web-Server and Web-Common-Http)
+      ansible.windows.win_feature:
+        name:
+          - Web-Server
+          - Web-Common-Http
+        state: present
+
+    - win_template
+    - win_regedit
+    - win_environmnet
+
+

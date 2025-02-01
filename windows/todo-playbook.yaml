@@ -1,0 +1,27 @@
+---
+- name: Windows Playbook
+  hosts: all
+  tasks:
+    - win_service
+
+    - win_service_info
+
+    - name: get info
+      win_shell: |
+        Get-Process -Name spoolsv -ErrorAction SilentlyContinue
+      register: status
+      failed_when: false
+
+    - name: Show
+      debug:
+        var: status
+
+    - win_command
+
+    - win_shell
+
+    - win_scheduled_tasks
+
+    - win_scheduled_tasks_stat
+
+
