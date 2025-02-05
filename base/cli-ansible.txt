@@ -31,6 +31,8 @@ ansible-doc shell
 ansible-doc -t lookup -l
 ansible-doc -y inventory -l
 ansible-doc -y inventory <plugin_name>
+ansible-doc -t callback -l
+ansible-doc -t callback <plugin_name>
 
 ansible-playbook -i inventory --tags "packages" playbooks/test.yaml
 ansible-playbook -i inventory --tags "packages,services" playbooks/test.yaml
