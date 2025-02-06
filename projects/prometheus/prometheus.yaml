@@ -1,0 +1,103 @@
+---
+- name: Install Prometheus Server
+  hosts: all
+  gather_facts: yes
+  become: yes
+
+  vars:
+    prometheus_version: "3.1.0"
+    prometheus_user: "prometheus"
+    prometheus_group: "prometheus"
+    prometheus_install_dir: "/opt/prometheus"
+    prometheus_download_dir: "/opt/downloads"
+    prometheus_data_dir: "/var/lib/prometheus"
+    prometheus_config_dir: "/etc/prometheus"
+
+  tasks:
+    - name: Create Prometheus Group
+      ansible.builtin.group:
+        name: "{{ prometheus_group }}"
+
+    - name: Create Prometheus User
+      ansible.builtin.user:
+        name: "{{ prometheus_user }}"
+        group: "{{ prometheus_group }}"
+        shell: "/sbin/nologin"
+        comment: "Prometheus User"
+
+    - name: Create Directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        owner: "{{ prometheus_user }}"
+        group: "{{ prometheus_group }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "{{ prometheus_install_dir }}"
+        - "{{ prometheus_download_dir }}"
+        - "{{ prometheus_data_dir }}"
+        - "{{ prometheus_config_dir }}"
+    
+    - name: Download Prometheus Archive
+      ansible.builtin.get_url:
+        url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+        dest: "{{ prometheus_download_dir }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+
+    - name: Extract Prometheus Binary
+      ansible.builtin.unarchive:
+        remote_src: yes
+        src: "{{ prometheus_download_dir }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+        dest: "{{ prometheus_download_dir }}"
+
+    - name: Copy Prometheus Binary Files
+      ansible.builtin.copy:
+        remote_src: yes
+        src: "{{ prometheus_download_dir }}/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}"
+        dest: "/usr/local/bin/{{ item }}"
+        mode: '0755'
+      loop:
+        - "prometheus"
+        - "promtool"
+
+    - name: Copy Prometheus Config Files
+      ansible.builtin.copy:
+        remote_src: yes
+        src: "{{ prometheus_download_dir }}/prometheus-{{ prometheus_version }}.linux-amd64/prometheus.yml"
+        dest: "{{ prometheus_config_dir }}/prometheus.yml"
+        owner: "{{ prometheus_user }}"
+        group: "{{ prometheus_group }}"
+        mode: '0644'
+
+    - name: Create Prometheus systemd service file
+      ansible.builtin.template:
+        src: "./prometheus.service.j2"
+        dest: "/etc/systemd/system/prometheus.service"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload Systemd Daemon
+      ansible.builtin.systemd_service:
+        daemon_reload: yes
+
+    - name: Enable and Start Prometheus Service
+      ansible.builtin.systemd_service:
+        name: prometheus
+        enabled: yes
+        state: started
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
