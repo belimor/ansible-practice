@@ -1,0 +1,37 @@
+
+metric:
+
+<metric_name>{<label_name>=<label_value>}
+
+metric types:
+
+- counters
+example: 
+  http_requests_total{method="GET", status="200"} = 200
+
+- gauge
+example: 
+  temperature_celsius{location="office"} = 25.5
+
+- histograms
+smaple of observed values over time arranged into chunks
+histograms export multiple time series
+    - cumulative counters:
+      <basename>_bucket{le="<upper inclusive bound>"}
+    - total sum:
+      <basename>_sum
+    - count of oberved events:
+      <basename>_count
+example:
+  request_duration_bucket{le="1.0"} = 100
+  request_duration_sum = 15.5
+  request_duration_count =150
+
+- summaries
+similar to histograms, but they include quantiles over the time period
+example:
+  api_response_time_seconds{quantile="0.5"} = 0.02
+  api_response_time_seconds_sum = 15.5
+  api_response_time_seconds_count = 1000
+
+

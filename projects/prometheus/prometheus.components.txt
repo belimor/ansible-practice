@@ -1,0 +1,12 @@
+
+- Server
+
+- Targets: 
+    Entities the Prometeus monitors by scraping metrics from them
+
+- Exporters: 
+    Export metrics in a way Proemtheus can understand
+
+- Alertmanager
+
+- Storage
